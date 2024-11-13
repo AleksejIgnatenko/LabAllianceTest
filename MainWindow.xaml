@@ -1,0 +1,28 @@
+﻿<Window x:Class="LabAllianceTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabAllianceTest"
+        mc:Ignorable="d"
+        Title="Main Window" Height="500" Width="500" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4eb8ce"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="MaxWidth" Value="450"/>
+            <Setter Property="MinWidth" Value="260"/>
+            <Setter Property="MaxHeight" Value="160"/>
+            <Setter Property="MinHeight" Value="60"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#222431">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Регистрация" Style="{StaticResource ButtonStyle}" Click="ButtonRegistrationClick"/>
+            <Button Content="Вход" Style="{StaticResource ButtonStyle}" Click="ButtonLoginClick"/>
+            <Button Content="Получить данные" Style="{StaticResource ButtonStyle}"/>
+        </StackPanel>
+    </Grid>
+</Window>
