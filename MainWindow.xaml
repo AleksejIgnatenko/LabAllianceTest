@@ -22,7 +22,7 @@
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Content="Регистрация" Style="{StaticResource ButtonStyle}" Click="ButtonRegistrationClick"/>
             <Button Content="Вход" Style="{StaticResource ButtonStyle}" Click="ButtonLoginClick"/>
-            <Button Content="Получить данные" Style="{StaticResource ButtonStyle}"/>
+            <Button Content="Получить данные" Style="{StaticResource ButtonStyle}" Click="ButtonGetAllUsersClick"/>
         </StackPanel>
     </Grid>
 </Window>

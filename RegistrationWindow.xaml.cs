@@ -26,6 +26,11 @@ namespace LabAllianceTest
                 string login = textBoxLogin.Text;
                 string password = textBoxPassword.Text;
 
+                labelErrorLogin.Content = string.Empty;
+                labelErrorPassword.Content = string.Empty;
+                labelErrorLogin.Content = string.Empty;
+                labelErrorPassword.Content = string.Empty;
+
                 var (errors, user) = UserModel.Create(login, password);
                 if (errors.Count > 0)
                 {
@@ -35,7 +40,7 @@ namespace LabAllianceTest
                     }
                     else
                     {
-                        labelErrorLogin.Content = "";
+                        labelErrorLogin.Content = string.Empty;
                     }
 
                     if (errors.TryGetValue("Password", out string? passwordError))
@@ -44,7 +49,7 @@ namespace LabAllianceTest
                     }
                     else
                     {
-                        labelErrorPassword.Content = "";
+                        labelErrorPassword.Content = string.Empty;
                     }
                 }
                 else
@@ -59,6 +64,10 @@ namespace LabAllianceTest
                         labelSuccessMessage.Content = message;
                         labelErrorMessage.Content = string.Empty;
                     }
+                    else if (statusCode == 400)
+                    {
+                        labelSuccessMessage.Content = message;
+                    }
                     else if (statusCode == 409)
                     {
                         labelSuccessMessage.Content = string.Empty;
@@ -68,7 +77,7 @@ namespace LabAllianceTest
             }
             catch (UserValidationException ex)
             {
-                if (ex.Errors.TryGetValue("login", out string? loginError))
+                if (ex.Errors.TryGetValue("Login", out string? loginError))
                 {
                     labelErrorLogin.Content = loginError;
                 }
@@ -77,7 +86,7 @@ namespace LabAllianceTest
                     labelErrorLogin.Content = "";
                 }
 
-                if (ex.Errors.TryGetValue("password", out string? passwordError))
+                if (ex.Errors.TryGetValue("Password", out string? passwordError))
                 {
                     labelErrorPassword.Content = passwordError;
                 }
@@ -93,7 +102,7 @@ namespace LabAllianceTest
             }
             catch(Exception ex)
             {
-                MessageBox.Show("В результате работы возникла непредвиденная ошибка.");
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

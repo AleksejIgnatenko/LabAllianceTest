@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LabAllianceTest"
         mc:Ignorable="d"
-        Title="Login Window" Height="450" Width="800">
+        Title="Login Window" Height="600" Width="700" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Visibility" Value="Hidden"/>
@@ -68,7 +68,7 @@
                 <Label x:Name="labelErrorPassword" Content="" Style="{StaticResource LabelErrorStyle}"/>
             </StackPanel>
 
-            <Button x:Name="login" Content="Логин" Style="{StaticResource ButtonStyle}" Click="LoginClick"/>
+            <Button x:Name="login" Content="Войти" Style="{StaticResource ButtonStyle}" Click="LoginClick"/>
             <Button x:Name="goBack" Content="Назад" Style="{StaticResource ButtonStyle}" Click="GoBackClick"/>
             <Label x:Name="labelSuccessMessage" Content="" Style="{StaticResource LabelSuccessStyle}"/>
             <Label x:Name="labelErrorMessage" Content="" Style="{StaticResource LabelErrorMessageStyle}"/>

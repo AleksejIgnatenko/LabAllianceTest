@@ -37,74 +37,27 @@ namespace LabAllianceTest
                 string login = textBoxLogin.Text;
                 string password = textBoxPassword.Text;
 
-                var (errors, user) = UserModel.Create(login, password);
-                if (errors.Count > 0)
-                {
-                    if (errors.TryGetValue("Login", out string? loginError))
-                    {
-                        labelErrorLogin.Content = loginError;
-                    }
-                    else
-                    {
-                        labelErrorLogin.Content = "";
-                    }
+                var user = UserModel.Create(login, password, false).user;
 
-                    if (errors.TryGetValue("Password", out string? passwordError))
-                    {
-                        labelErrorPassword.Content = passwordError;
-                    }
-                    else
-                    {
-                        labelErrorPassword.Content = "";
-                    }
-                }
-                else
-                {
-                    labelErrorLogin.Content = string.Empty;
-                    labelErrorPassword.Content = string.Empty;
+                labelErrorLogin.Content = string.Empty;
+                labelErrorPassword.Content = string.Empty;
 
-                    var (message, statusCode) = await _userService.LoginUserAsync(user);
+                var (message, statusCode) = await _userService.LoginUserAsync(user);
 
-                    if (statusCode == 200)
-                    {
-                        labelSuccessMessage.Content = message;
-                        labelErrorMessage.Content = string.Empty;
-                    }
-                    else if (statusCode == 401)
-                    {
-                        labelErrorMessage.Content = message;
-                        labelSuccessMessage.Content = message;
-                    }
-                }
-            }
-            catch (UserValidationException ex)
-            {
-                if (ex.Errors.TryGetValue("login", out string? loginError))
+                if (statusCode == 200)
                 {
-                    labelErrorLogin.Content = loginError;
+                    labelSuccessMessage.Content = message;
+                    labelErrorMessage.Content = string.Empty;
                 }
-                else
+                else if (statusCode == 401)
                 {
-                    labelErrorLogin.Content = "";
-                }
-
-                if (ex.Errors.TryGetValue("password", out string? passwordError))
-                {
-                    labelErrorPassword.Content = passwordError;
-                }
-                else
-                {
-                    labelErrorPassword.Content = "";
-                }
-
-                foreach (var key in ex.Errors.Keys)
-                {
-                    labelErrorPassword.Content += key;
+                    labelSuccessMessage.Content = string.Empty;
+                    labelErrorMessage.Content = message;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("В результате работы возникла непредвиденная ошибка.");
+                MessageBox.Show("В результате работы возникла непредвиденная ошибка.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

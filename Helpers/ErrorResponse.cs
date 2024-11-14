@@ -3,6 +3,6 @@ namespace LabAllianceTest.Helpers
 {
     public class ErrorResponse
     {
-        public ErrorDetails Error { get; set; } = new ErrorDetails();
+        public Dictionary<string, string> error { get; set; } = new Dictionary<string, string>();
     }
 }

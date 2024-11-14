@@ -26,5 +26,12 @@ namespace LabAllianceTest
             loginWindow.Show();
             this.Close();
         }
+
+        private void ButtonGetAllUsersClick(object sender, RoutedEventArgs e)
+        {
+            AllUsersWindow allUsersWindow = new AllUsersWindow();
+            allUsersWindow.Show();
+            this.Close();
+        }
     }
 }
