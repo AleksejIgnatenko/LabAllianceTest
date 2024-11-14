@@ -1,20 +1,10 @@
 ﻿using LabAllianceTest.Abstractions;
-using LabAllianceTest.Exceptions;
+using LabAllianceTest.Helpers;
 using LabAllianceTest.Models;
 using LabAllianceTest.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LabAllianceTest
 {
@@ -23,7 +13,11 @@ namespace LabAllianceTest
     /// </summary>
     public partial class LoginWindow : Window
     {
+        string defaultTextTextBoxLogin = "Login";
+        string defaultTextTextBoxPassword = "Пароль";
+
         IUserService _userService;
+
         public LoginWindow()
         {
             _userService = new UserService();
@@ -66,6 +60,24 @@ namespace LabAllianceTest
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
+        }
+
+        private void TextBoxLoginGotFocus(object sender, RoutedEventArgs e)
+        {
+            UIHelper.TextBox_Style_0(textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.TextBox_Style_1(textBoxPassword, defaultTextTextBoxPassword);
+
+            UIHelper.Label_Style_1(labelLogin, textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.Label_Style_1(labelPassword, textBoxPassword, defaultTextTextBoxPassword);
+        }
+
+        private void TextBoxPasswordGotFocus(object sender, RoutedEventArgs e)
+        {
+            UIHelper.TextBox_Style_1(textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.TextBox_Style_0(textBoxPassword, defaultTextTextBoxPassword);
+
+            UIHelper.Label_Style_1(labelLogin, textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.Label_Style_1(labelPassword, textBoxPassword, defaultTextTextBoxPassword);
         }
     }
 }

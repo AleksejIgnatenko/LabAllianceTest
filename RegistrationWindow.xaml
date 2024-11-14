@@ -57,14 +57,16 @@
         </Style>
     </Window.Resources>
     <Grid Background="#222431">
-        <StackPanel Background="#222431" Margin="20" MaxWidth="450" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Background="#222431" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Margin="0 0 0 20">
                 <Label x:Name="labelLogin" Content="Логин" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="textBoxLogin" Text="Login" Style="{StaticResource TextBoxStyle}" />
+                <TextBox x:Name="textBoxLogin" Text="Login" Style="{StaticResource TextBoxStyle}" GotFocus="TextBoxLoginGotFocus"/>
                 <Label x:Name="labelErrorLogin" Content="" Style="{StaticResource LabelErrorStyle}"/>
 
                 <Label x:Name="labelPassword" Content="Пароль" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="textBoxPassword" Text="Пароль" Style="{StaticResource TextBoxStyle}"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox x:Name="textBoxPassword" Text="Пароль" Style="{StaticResource TextBoxStyle}" GotFocus="TextBoxPasswordGotFocus" />
+                </StackPanel>
                 <Label x:Name="labelErrorPassword" Content="" Style="{StaticResource LabelErrorStyle}"/>
             </StackPanel>
 

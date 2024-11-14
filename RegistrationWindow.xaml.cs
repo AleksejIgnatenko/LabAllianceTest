@@ -1,8 +1,10 @@
 ﻿using LabAllianceTest.Abstractions;
 using LabAllianceTest.Exceptions;
+using LabAllianceTest.Helpers;
 using LabAllianceTest.Models;
 using LabAllianceTest.Services;
 using System.Windows;
+using System.Windows.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LabAllianceTest
@@ -12,6 +14,9 @@ namespace LabAllianceTest
     /// </summary>
     public partial class RegistrationWindow : Window
     {
+        string defaultTextTextBoxLogin = "Login";
+        string defaultTextTextBoxPassword = "Пароль";
+
         IUserService _userService;
         public RegistrationWindow()
         {
@@ -111,6 +116,24 @@ namespace LabAllianceTest
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
+        }
+
+        private void TextBoxLoginGotFocus(object sender, RoutedEventArgs e)
+        {
+            UIHelper.TextBox_Style_0(textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.TextBox_Style_1(textBoxPassword, defaultTextTextBoxPassword);
+
+            UIHelper.Label_Style_1(labelLogin, textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.Label_Style_1(labelPassword, textBoxPassword, defaultTextTextBoxPassword);
+        }
+
+        private void TextBoxPasswordGotFocus(object sender, RoutedEventArgs e)
+        {
+            UIHelper.TextBox_Style_1(textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.TextBox_Style_0(textBoxPassword, defaultTextTextBoxPassword);
+
+            UIHelper.Label_Style_1(labelLogin, textBoxLogin, defaultTextTextBoxLogin);
+            UIHelper.Label_Style_1(labelPassword, textBoxPassword, defaultTextTextBoxPassword);
         }
     }
 }
