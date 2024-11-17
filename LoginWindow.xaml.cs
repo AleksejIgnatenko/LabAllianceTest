@@ -51,7 +51,7 @@ namespace LabAllianceTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("В результате работы возникла непредвиденная ошибка.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

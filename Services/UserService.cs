@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Windows;
 
 namespace LabAllianceTest.Services
 {
@@ -15,17 +16,19 @@ namespace LabAllianceTest.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IFileStorage _fileStorage;
+        private readonly IPasswordHasher _passwordHasher;
 
         public UserService()
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7243/api/User/");
-            _fileStorage = new FileStorage("token.txt");
+            _fileStorage = new JsonFileStorage("tokenResponse.json");
+            _passwordHasher = new PasswordHasher();
         }
 
         public async Task<(string message, int statusCode)> RegistrationUserAsync(UserModel user)
         {
-            var userRequest = new UserRequest(user.Login, user.Password);
+            var userRequest = new UserRequest(user.Login, _passwordHasher.Generate(user.Password));
             var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(userRequest), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("registration", request);
@@ -48,7 +51,7 @@ namespace LabAllianceTest.Services
             }
             else if (response.StatusCode == HttpStatusCode.Conflict)
             {
-                return ("Пользоватлеь с таким Login уже существует.", 409);
+                return ("Пользователь с таким Login уже существует.", 409);
             }
 
             response.EnsureSuccessStatusCode();
@@ -61,22 +64,22 @@ namespace LabAllianceTest.Services
             var userRequest = new UserRequest(user.Login, user.Password);
             var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(userRequest), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("login", request);
+            var response = await _httpClient.PostAsync("/connect/token", request);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content);
 
-                await _fileStorage.WriteToFileAsync(tokenResponse.token);
+                await _fileStorage.WriteToFileJsonAsync(tokenResponse);
 
                 return ("Вход произошел успешно!", 200);
             }
-
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 return ("Неверный логин или пароль", 401);
             }
+
 
             response.EnsureSuccessStatusCode();
 
@@ -85,7 +88,7 @@ namespace LabAllianceTest.Services
 
         public async Task<List<UserModel>?> GetAllUsersAsync()
         {
-            var token = await _fileStorage.ReadFromFileAsync();
+            var token = await _fileStorage.ReadAccessTokenFromFileJsonAsync();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -113,20 +116,27 @@ namespace LabAllianceTest.Services
 
         public async Task<(string message, int statusCode)> RefreshToken()
         {
-            var token = await _fileStorage.ReadFromFileAsync();
+            var refreshToken = await _fileStorage.ReadRefreshTokenFromFileJsonAsync();
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(refreshToken), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.GetAsync("token");
+            var response = await _httpClient.PostAsync("/connect/refresh", request);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content);
 
-                await _fileStorage.WriteToFileAsync(tokenResponse.token);
+                await _fileStorage.WriteToFileJsonAsync(tokenResponse);
 
-                return ("Токен обновлен успешно!", 200);
+                return ("Токен успешно обновлен!", 200);
+            }
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var error = JsonSerializer.Deserialize<TokenErrorResponse>(content);
+
+                return (error.Error, 400);
             }
 
             response.EnsureSuccessStatusCode();

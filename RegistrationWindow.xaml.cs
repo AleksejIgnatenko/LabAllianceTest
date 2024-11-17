@@ -4,8 +4,6 @@ using LabAllianceTest.Helpers;
 using LabAllianceTest.Models;
 using LabAllianceTest.Services;
 using System.Windows;
-using System.Windows.Controls;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LabAllianceTest
 {
@@ -98,11 +96,6 @@ namespace LabAllianceTest
                 else
                 {
                     labelErrorPassword.Content = "";
-                }
-
-                foreach (var key in ex.Errors.Keys)
-                {
-                    labelErrorPassword.Content += key;
                 }
             }
             catch(Exception ex)

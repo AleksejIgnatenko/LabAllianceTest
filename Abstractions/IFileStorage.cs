@@ -1,8 +1,11 @@
-﻿namespace LabAllianceTest.Abstractions
+﻿using LabAllianceTest.Helpers;
+
+namespace LabAllianceTest.Abstractions
 {
     internal interface IFileStorage
     {
-        Task<string> ReadFromFileAsync();
-        Task WriteToFileAsync(string content);
+        Task<string> ReadAccessTokenFromFileJsonAsync();
+        Task<string> ReadRefreshTokenFromFileJsonAsync();
+        Task WriteToFileJsonAsync(TokenResponse tokenResponse);
     }
 }

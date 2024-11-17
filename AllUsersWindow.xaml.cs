@@ -49,11 +49,19 @@ namespace LabAllianceTest
             {
                 var (message, statusCode) = await _userService.RefreshToken();
 
-                var users = await _userService.GetAllUsersAsync();
+                if (statusCode == 200)
+                {
+                    var users = await _userService.GetAllUsersAsync();
+                    allUsersDataGrid.ItemsSource = users;
+                    MessageBox.Show(message, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else if(statusCode == 400)
+                {
+                    MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
 
-                allUsersDataGrid.ItemsSource = users;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
