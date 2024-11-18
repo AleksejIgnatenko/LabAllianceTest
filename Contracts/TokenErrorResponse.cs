@@ -1,4 +1,4 @@
-﻿namespace LabAllianceTest.Helpers
+﻿namespace LabAllianceTest.Contracts
 {
     internal class TokenErrorResponse
     {

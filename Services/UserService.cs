@@ -26,19 +26,21 @@ namespace LabAllianceTest.Services
             _passwordHasher = new PasswordHasher();
         }
 
+        // Регистрация пользователя
         public async Task<(string message, int statusCode)> RegistrationUserAsync(UserModel user)
         {
+            // Создание запроса
             var userRequest = new UserRequest(user.Login, _passwordHasher.Generate(user.Password));
             var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(userRequest), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("registration", request);
 
+            // Проверка ответа по StatusCode
             if (response.IsSuccessStatusCode)
             {
                 return ("Регистрация прошла успешно", 200);
             }
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var content = await response.Content.ReadAsStringAsync();
 
@@ -59,13 +61,16 @@ namespace LabAllianceTest.Services
             return (await response.Content.ReadAsStringAsync(), (int)response.StatusCode);
         }
 
+        // Вход
         public async Task<(string message, int statusCode)> LoginUserAsync(UserModel user)
         {
-            var userRequest = new UserRequest(user.Login, user.Password);
+            // Создание запроса
+            var userRequest = new UserRequest(user.Login, _passwordHasher.Generate(user.Password));
             var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(userRequest), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("/connect/token", request);
 
+            // Проверка ответа по StatusCode
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -88,12 +93,13 @@ namespace LabAllianceTest.Services
 
         public async Task<List<UserModel>?> GetAllUsersAsync()
         {
+            // Получение токена и добавление его в headers
             var token = await _fileStorage.ReadAccessTokenFromFileJsonAsync();
-
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await _httpClient.GetAsync("");
 
+            // Проверка ответа по StatusCode
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
@@ -116,12 +122,13 @@ namespace LabAllianceTest.Services
 
         public async Task<(string message, int statusCode)> RefreshToken()
         {
+            // Получение refreshToken и создание запроса
             var refreshToken = await _fileStorage.ReadRefreshTokenFromFileJsonAsync();
-
             var request = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(refreshToken), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("/connect/refresh", request);
 
+            // Проверка ответа по StatusCode
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();

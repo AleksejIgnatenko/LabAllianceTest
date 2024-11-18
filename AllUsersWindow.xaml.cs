@@ -18,6 +18,7 @@ namespace LabAllianceTest
             this.Loaded += AllUsersWindowLoaded; 
         }
 
+        // Загрузка пользователей
         private async void AllUsersWindowLoaded(object sender, RoutedEventArgs e)
         {
             try
@@ -43,6 +44,7 @@ namespace LabAllianceTest
             this.Close();
         }
 
+        // Обновление токена
         private async void RefreshTokenButtonClick(object sender, RoutedEventArgs e)
         {
             try

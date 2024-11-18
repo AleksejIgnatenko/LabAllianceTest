@@ -24,6 +24,7 @@ namespace LabAllianceTest
             InitializeComponent();
         }
 
+        // Вход
         private async void LoginClick(object sender, RoutedEventArgs e)
         {
             try
@@ -31,11 +32,13 @@ namespace LabAllianceTest
                 string login = textBoxLogin.Text;
                 string password = textBoxPassword.Text;
 
-                var user = UserModel.Create(login, password, false).user;
+                // Создание пользователя
+                var user = UserModel.Create(login, password).user;
 
                 labelErrorLogin.Content = string.Empty;
                 labelErrorPassword.Content = string.Empty;
 
+                // Результаты входа
                 var (message, statusCode) = await _userService.LoginUserAsync(user);
 
                 if (statusCode == 200)
@@ -62,6 +65,7 @@ namespace LabAllianceTest
             this.Close();
         }
 
+        // Визуальные эффекты
         private void TextBoxLoginGotFocus(object sender, RoutedEventArgs e)
         {
             UIHelper.TextBox_Style_0(textBoxLogin, defaultTextTextBoxLogin);
@@ -71,6 +75,7 @@ namespace LabAllianceTest
             UIHelper.Label_Style_1(labelPassword, textBoxPassword, defaultTextTextBoxPassword);
         }
 
+        // Визуальные эффекты
         private void TextBoxPasswordGotFocus(object sender, RoutedEventArgs e)
         {
             UIHelper.TextBox_Style_1(textBoxLogin, defaultTextTextBoxLogin);

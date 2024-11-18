@@ -22,6 +22,7 @@ namespace LabAllianceTest
             InitializeComponent();
         }
 
+        // Регистрация
         private async void RegistrationClick(object sender, RoutedEventArgs e)
         {
             try
@@ -34,6 +35,7 @@ namespace LabAllianceTest
                 labelErrorLogin.Content = string.Empty;
                 labelErrorPassword.Content = string.Empty;
 
+                // Создание и валидация user
                 var (errors, user) = UserModel.Create(login, password);
                 if (errors.Count > 0)
                 {
@@ -60,6 +62,7 @@ namespace LabAllianceTest
                     labelErrorLogin.Content = string.Empty;
                     labelErrorPassword.Content = string.Empty;
 
+                    // Результаты регистрации
                     var (message, statusCode) = await _userService.RegistrationUserAsync(user);
 
                     if (statusCode == 200)

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 using LabAllianceTest.Abstractions;
@@ -15,6 +16,7 @@ namespace LabAllianceTest.Helpers
             _filePath = filePath;
         }
 
+        // Сохранение токена в файл
         public async Task WriteToFileJsonAsync(TokenResponse token)
         {
             try
@@ -25,8 +27,20 @@ namespace LabAllianceTest.Helpers
                     WriteIndented = true
                 });
 
-                // Запись JSON в файл
-                await File.WriteAllTextAsync(_filePath, json);
+                // Проверка на существование файла
+                if (!File.Exists(_filePath))
+                {
+                    // Создание файла и запись JSON в него
+                    using (var stream = File.Create(_filePath))
+                    {
+                        await stream.WriteAsync(Encoding.UTF8.GetBytes(json));
+                    }
+                }
+                else
+                {
+                    // Запись JSON в существующий файл
+                    await File.WriteAllTextAsync(_filePath, json);
+                }
             }
             catch (Exception ex)
             {
@@ -34,12 +48,15 @@ namespace LabAllianceTest.Helpers
             }
         }
 
+        // Чтение AccessToken из файла
         public async Task<string> ReadAccessTokenFromFileJsonAsync()
         {
             try
             {
+                // Проверка наличия файла
                 if (File.Exists(_filePath))
                 {
+                    // Получение AccessToken из файла
                     var jsonString = await File.ReadAllTextAsync(_filePath);
                     var jsonDocument = JsonDocument.Parse(jsonString);
                     if (jsonDocument.RootElement.TryGetProperty("access_token", out var accessToken))
@@ -56,12 +73,15 @@ namespace LabAllianceTest.Helpers
             }
         }
 
+        // Чтение RefreshToken из файла
         public async Task<string> ReadRefreshTokenFromFileJsonAsync()
         {
             try
             {
+                // Проверка наличия файла
                 if (File.Exists(_filePath))
                 {
+                    // Получение RefreshToken из файла
                     var jsonString = await File.ReadAllTextAsync(_filePath);
                     var jsonDocument = JsonDocument.Parse(jsonString);
                     if (jsonDocument.RootElement.TryGetProperty("refresh_token", out var refreshToken))

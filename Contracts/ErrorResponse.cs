@@ -1,5 +1,4 @@
-﻿
-namespace LabAllianceTest.Helpers
+﻿namespace LabAllianceTest.Contracts
 {
     public class ErrorResponse
     {
